@@ -95,7 +95,7 @@ class Relation(Drawable):
             left_cardinality=match.group('left_cardinality'),
         )
 
-    def __init__(self, right_col, right_id, left_col, left_id, right_cardinality=None, left_cardinality=None):
+    def __init__(self, right_col, right_id, left_col, left_id, right_cardinality='', left_cardinality=''):
         if right_cardinality not in self.cardinalities.keys() \
                 or left_cardinality not in self.cardinalities.keys():
             raise ValueError('Cardinality should be in {}"'.format(self.cardinalities.keys()))
@@ -122,14 +122,7 @@ class Relation(Drawable):
     def to_dot(self):
         if self.right_cardinality == self.left_cardinality == '':
             return ''
-        cards = []
-        if self.left_cardinality != '':
-            cards.append('tail' +
-                         self.graphviz_cardinalities(self.left_cardinality))
-        if self.right_cardinality != '':
-            cards.append('head' +
-                         self.graphviz_cardinalities(self.right_cardinality))
-        return '"{}":"{}" -- "{}":"{}" [{}];'.format(self.left_col, self.left_id, self.right_col, self.right_id, ','.join(cards))
+        return '"{}":"{}" -- "{}":"{}";'.format(self.left_col, self.left_id, self.right_col, self.right_id)
 
     def __eq__(self, other):
         if Drawable.__eq__(self, other):
